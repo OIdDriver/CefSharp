@@ -82,6 +82,8 @@ namespace CefSharp
 
             void OnLoaded(Object^ sender, RoutedEventArgs^ e);
             void OnUnloaded(Object^ sender, RoutedEventArgs^ e);
+            void OnGotKeyboardFocus(Object^ sender, KeyboardFocusChangedEventArgs^ e);
+            void OnLostKeyboardFocus(Object^ sender, KeyboardFocusChangedEventArgs^ e);
             void OnPopupMouseMove(Object^ sender, MouseEventArgs^ e);
             void OnPopupMouseWheel(Object^ sender,MouseWheelEventArgs^ e);
             void OnPopupMouseDown(Object^ sender,MouseButtonEventArgs^ e);
@@ -99,10 +101,9 @@ namespace CefSharp
 
         protected:
             virtual Size ArrangeOverride(Size size) override;
-            virtual void OnGotFocus(RoutedEventArgs^ e) override;
-            virtual void OnLostFocus(RoutedEventArgs^ e) override;
             virtual void OnPreviewKeyDown(KeyEventArgs^ e) override;
             virtual void OnPreviewKeyUp(KeyEventArgs^ e) override;
+            virtual void OnPreviewTextInput(TextCompositionEventArgs^ e) override;
 
             virtual void OnMouseMove(MouseEventArgs^ e) override;
             virtual void OnMouseWheel(MouseWheelEventArgs^ e) override;
@@ -127,6 +128,7 @@ namespace CefSharp
             virtual event ConsoleMessageEventHandler^ ConsoleMessage;
             virtual event KeyEventHandler^ BrowserKey;
             virtual event LoadCompletedEventHandler^ LoadCompleted;
+            virtual event LoadStartedEventHandler^ LoadStarted;
 
             WebView()
             {
@@ -290,8 +292,8 @@ namespace CefSharp
 
             virtual void SetNavState(bool isLoading, bool canGoBack, bool canGoForward);
 
-            virtual void OnFrameLoadStart(String^ url);
-            virtual void OnFrameLoadEnd(String^ url);
+            virtual void OnFrameLoadStart(String^ url, bool isMainFrame);
+            virtual void OnFrameLoadEnd(String^ url, bool isMainFrame);
             virtual void OnTakeFocus(bool next);
             virtual void OnConsoleMessage(String^ message, String^ source, int line);
 
@@ -305,7 +307,6 @@ namespace CefSharp
 
             virtual void SetPopupIsOpen(bool isOpen);
             virtual void SetPopupSizeAndPosition(const void* rect);
-
         };
     }
 }
